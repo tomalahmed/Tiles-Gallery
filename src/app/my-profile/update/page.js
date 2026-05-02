@@ -5,7 +5,7 @@ import { getServerSession } from "@/lib/server-session";
 
 export default async function UpdateProfilePage() {
   const sessionData = await getServerSession();
-  const user = sessionData?.session?.user;
+  const user = sessionData?.user ?? sessionData?.session?.user;
 
   if (!user) {
     redirect("/login?next=/my-profile/update");

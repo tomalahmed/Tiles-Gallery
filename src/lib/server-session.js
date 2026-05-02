@@ -1,28 +1,27 @@
 import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export async function getServerSession() {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  try {
+    const requestHeaders = await headers();
+    const sessionData = await auth.api.getSession({
+      headers: requestHeaders,
+    });
 
-  if (!host) {
+    if (!sessionData) {
+      return null;
+    }
+
+    const user = sessionData.user ?? sessionData.session?.user ?? null;
+    if (!user) {
+      return null;
+    }
+
+    return {
+      ...sessionData,
+      user,
+    };
+  } catch {
     return null;
   }
-
-  const protocol =
-    requestHeaders.get("x-forwarded-proto") ??
-    (process.env.NODE_ENV === "development" ? "http" : "https");
-
-  const cookie = requestHeaders.get("cookie") ?? "";
-
-  const response = await fetch(`${protocol}://${host}/api/auth/get-session`, {
-    headers: { cookie },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const data = await response.json();
-  return data?.session ? data : null;
 }

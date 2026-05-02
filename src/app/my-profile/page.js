@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 
 export default async function MyProfilePage() {
   const sessionData = await getServerSession();
-  const user = sessionData?.session?.user;
+  const user = sessionData?.user ?? sessionData?.session?.user;
   // #region agent log
   await fetch("http://127.0.0.1:7322/ingest/cbbbcd65-c654-464a-b36c-50ef6abcbd17", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ca1ca6" }, body: JSON.stringify({ sessionId: "ca1ca6", runId: "pre-fix", hypothesisId: "H2", location: "src/app/my-profile/page.js:12", message: "My profile classes before canonicalization", data: { hasUser: Boolean(user), avatarContainerClass: "border-[var(--color-border)] bg-[var(--color-bg)]", panelBorderClass: "border-[var(--color-border)]", footerBorderClass: "border-[var(--color-border)]", primaryLinkClass: "text-(--color-primary)" }, timestamp: Date.now() }) }).catch(() => {});
   await fetch("http://127.0.0.1:7322/ingest/cbbbcd65-c654-464a-b36c-50ef6abcbd17", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ca1ca6" }, body: JSON.stringify({ sessionId: "ca1ca6", runId: "post-fix", hypothesisId: "V2", location: "src/app/my-profile/page.js:13", message: "My profile classes after canonicalization", data: { hasUser: Boolean(user), avatarContainerClass: "border-(--color-border) bg-background", panelBorderClass: "border-(--color-border)", footerBorderClass: "border-(--color-border)" }, timestamp: Date.now() }) }).catch(() => {});
