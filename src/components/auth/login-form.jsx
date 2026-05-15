@@ -60,7 +60,7 @@ export default function LoginForm({ nextPath = "/" }) {
   };
 
   return (
-    <main className="relative flex min-h-screen w-full bg-[#08090d] text-white">
+    <main className="relative flex min-h-screen w-full bg-[#0d0c0c] text-[#f4efe7]">
       <div className="relative hidden min-h-screen w-1/2 overflow-hidden lg:block">
         <Image
           src="/login.png"
@@ -70,14 +70,14 @@ export default function LoginForm({ nextPath = "/" }) {
           sizes="50vw"
           className="object-cover grayscale opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#070707]/90 via-[#0d0d0f]/45 to-transparent" />
         <div className="absolute bottom-0 left-0 z-10 max-w-xl p-10 xl:p-16">
           <h1 className="mb-5 text-5xl font-light leading-tight text-white">
             Mastery in
             <br />
             Materiality.
           </h1>
-          <p className="max-w-md text-base leading-7 text-white/75">
+          <p className="max-w-md text-base leading-7 text-[#d7cab9]">
             Access our curated collection of architectural surfaces designed for the modern visionary.
           </p>
         </div>
@@ -90,20 +90,20 @@ export default function LoginForm({ nextPath = "/" }) {
             alt="Luxury architectural surface pattern"
             fill
             sizes="100vw"
-            className="object-cover opacity-25 grayscale"
+            className="object-cover opacity-30 grayscale"
           />
-          <div className="absolute inset-0 bg-black/75" />
+          <div className="absolute inset-0 bg-[#0c0b0b]/80" />
         </div>
 
-        <div className="relative z-10 w-full max-w-[440px] border border-white/10 bg-black/40 p-8 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-12">
+        <div className="relative z-10 w-full max-w-[440px] border border-[#7d6438]/35 bg-linear-to-b from-[#130f0f]/72 to-[#0f0d0d]/72 p-8 shadow-[0_24px_85px_rgba(0,0,0,0.5)] backdrop-blur-xl md:p-12">
           <div className="mb-10">
-            <span className="mb-4 block text-xs tracking-[0.22em] text-[#c7a15a]">WELCOME BACK</span>
-            <h2 className="text-4xl font-light text-white">Architect Login</h2>
+            <span className="mb-4 block text-xs tracking-[0.22em] text-[#d2ae6d]">WELCOME BACK</span>
+            <h2 className="text-4xl font-light text-[#f4efe7]">Architect Login</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="group">
-              <label className="mb-2 block text-xs tracking-[0.16em] text-white/75 transition-colors group-focus-within:text-[#c7a15a]">
+              <label className="mb-2 block text-xs tracking-[0.16em] text-[#c8bca9] transition-colors group-focus-within:text-[#d2ae6d]">
                 EMAIL ADDRESS
               </label>
               <input
@@ -112,17 +112,17 @@ export default function LoginForm({ nextPath = "/" }) {
                 placeholder="e.g. renzo@piano.com"
                 autoComplete="email"
                 required
-                className="w-full border-x-0 border-b border-t-0 border-white/35 bg-transparent py-3 text-base text-white outline-none transition-colors placeholder:text-white/50 focus:border-[#c7a15a]"
+                className="w-full border-x-0 border-b border-t-0 border-[#705d40] bg-transparent py-3 text-base text-[#f4efe7] outline-none transition-colors placeholder:text-[#9f927e] focus:border-[#d2ae6d]"
                 disabled={isEmailLoading || isGoogleLoading}
               />
             </div>
 
             <div className="group">
               <div className="mb-2 flex items-end justify-between">
-                <label className="text-xs tracking-[0.16em] text-white/75 transition-colors group-focus-within:text-[#c7a15a]">
+                <label className="text-xs tracking-[0.16em] text-[#c8bca9] transition-colors group-focus-within:text-[#d2ae6d]">
                   PASSWORD
                 </label>
-                <Link href="#" className="text-[10px] tracking-[0.12em] text-white/70 transition-colors hover:text-[#c7a15a]">
+                <Link href="#" className="text-[10px] tracking-[0.12em] text-[#b9ac9a] transition-colors hover:text-[#d2ae6d]">
                   FORGOT PASSWORD?
                 </Link>
               </div>
@@ -132,7 +132,7 @@ export default function LoginForm({ nextPath = "/" }) {
                 placeholder="........"
                 autoComplete="current-password"
                 required
-                className="w-full border-x-0 border-b border-t-0 border-white/35 bg-transparent py-3 text-base text-white outline-none transition-colors placeholder:text-white/50 focus:border-[#c7a15a]"
+                className="w-full border-x-0 border-b border-t-0 border-[#705d40] bg-transparent py-3 text-base text-[#f4efe7] outline-none transition-colors placeholder:text-[#9f927e] focus:border-[#d2ae6d]"
                 disabled={isEmailLoading || isGoogleLoading}
               />
             </div>
@@ -143,20 +143,20 @@ export default function LoginForm({ nextPath = "/" }) {
               <button
                 type="submit"
                 disabled={isEmailLoading || isGoogleLoading}
-                className="w-full bg-[#c7a15a] py-4 text-sm tracking-[0.18em] text-[#151515] transition-all hover:bg-[#d4b372] disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full bg-[#c8a15d] py-4 text-sm tracking-[0.18em] text-[#1a1611] transition-all hover:bg-[#ddb978] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isEmailLoading ? "SIGNING IN..." : "LOG INTO ACCOUNT"}
               </button>
 
               <div className="flex items-center gap-4 py-1">
-                <div className="h-px flex-grow bg-white/20" />
-                <span className="text-[10px] tracking-[0.16em] text-white/60">OR</span>
-                <div className="h-px flex-grow bg-white/20" />
+                <div className="h-px grow bg-[#3a3126]" />
+                <span className="text-[10px] tracking-[0.16em] text-[#9f927e]">OR</span>
+                <div className="h-px grow bg-[#3a3126]" />
               </div>
 
               <Link
                 href={registerHref}
-                className="block w-full border border-white/20 bg-transparent py-4 text-center text-sm tracking-[0.18em] text-white transition-all hover:bg-white hover:text-black"
+                className="block w-full border border-[#65533a] bg-transparent py-4 text-center text-sm tracking-[0.18em] text-[#f4efe7] transition-all hover:border-[#d2ae6d] hover:text-[#d2ae6d]"
               >
                 CREATE AN ACCOUNT
               </Link>
@@ -165,7 +165,7 @@ export default function LoginForm({ nextPath = "/" }) {
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={isEmailLoading || isGoogleLoading}
-                className="flex w-full items-center justify-center gap-3 bg-white py-4 text-sm tracking-[0.12em] text-black transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex w-full items-center justify-center gap-3 bg-[#f5f1ea] py-4 text-sm tracking-[0.12em] text-[#171411] transition-all hover:bg-[#ebe2d6] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path
@@ -190,9 +190,9 @@ export default function LoginForm({ nextPath = "/" }) {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-white/75">
+          <p className="mt-10 text-center text-sm text-[#c8bca9]">
             Are you a trade professional?{" "}
-            <Link href="#" className="border-b border-[#c7a15a]/40 text-[#c7a15a] transition-colors hover:border-[#c7a15a]">
+            <Link href="#" className="border-b border-[#d2ae6d]/45 text-[#d2ae6d] transition-colors hover:border-[#d2ae6d]">
               Request trade access
             </Link>
           </p>
