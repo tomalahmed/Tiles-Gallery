@@ -122,7 +122,7 @@ export default function LoginForm({ nextPath = "/" }) {
                 <label className="text-xs tracking-[0.16em] text-[#c8bca9] transition-colors group-focus-within:text-[#d2ae6d]">
                   PASSWORD
                 </label>
-                <Link href="#" className="text-[10px] tracking-[0.12em] text-[#b9ac9a] transition-colors hover:text-[#d2ae6d]">
+                <Link href="/forgot-password" className="text-[10px] tracking-[0.12em] text-[#b9ac9a] transition-colors hover:text-[#d2ae6d]">
                   FORGOT PASSWORD?
                 </Link>
               </div>
@@ -143,7 +143,7 @@ export default function LoginForm({ nextPath = "/" }) {
               <button
                 type="submit"
                 disabled={isEmailLoading || isGoogleLoading}
-                className="w-full bg-[#c8a15d] py-4 text-sm tracking-[0.18em] text-[#1a1611] transition-all hover:bg-[#ddb978] disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full bg-[#c8a15d] py-4 text-sm tracking-[0.18em] text-[#1a1611] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#ddb978] active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isEmailLoading ? "SIGNING IN..." : "LOG INTO ACCOUNT"}
               </button>
@@ -156,7 +156,7 @@ export default function LoginForm({ nextPath = "/" }) {
 
               <Link
                 href={registerHref}
-                className="block w-full border border-[#65533a] bg-transparent py-4 text-center text-sm tracking-[0.18em] text-[#f4efe7] transition-all hover:border-[#d2ae6d] hover:text-[#d2ae6d]"
+                className="block w-full border border-[#65533a] bg-transparent py-4 text-center text-sm tracking-[0.18em] text-[#f4efe7] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#d2ae6d] hover:text-[#d2ae6d] active:translate-y-0 active:scale-[0.99]"
               >
                 CREATE AN ACCOUNT
               </Link>
@@ -165,7 +165,7 @@ export default function LoginForm({ nextPath = "/" }) {
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={isEmailLoading || isGoogleLoading}
-                className="flex w-full items-center justify-center gap-3 bg-[#f5f1ea] py-4 text-sm tracking-[0.12em] text-[#171411] transition-all hover:bg-[#ebe2d6] disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex w-full items-center justify-center gap-3 bg-[#f5f1ea] py-4 text-sm tracking-[0.12em] text-[#171411] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#ebe2d6] active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path
@@ -192,7 +192,10 @@ export default function LoginForm({ nextPath = "/" }) {
 
           <p className="mt-10 text-center text-sm text-[#c8bca9]">
             Are you a trade professional?{" "}
-            <Link href="#" className="border-b border-[#d2ae6d]/45 text-[#d2ae6d] transition-colors hover:border-[#d2ae6d]">
+            <Link
+              href="/trade-access"
+              className="border-b border-[#d2ae6d]/45 text-[#d2ae6d] transition-colors hover:border-[#d2ae6d]"
+            >
               Request trade access
             </Link>
           </p>

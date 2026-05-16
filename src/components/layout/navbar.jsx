@@ -1,17 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faGrip, faHouse, faRightFromBracket, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faGrip,
+  faHouse,
+  faRightFromBracket,
+  faUser,
+  faXmark,
+  faBuilding,
+} from "@fortawesome/free-solid-svg-icons";
 import { authClient } from "@/lib/auth-client";
 import Button from "@/components/ui/button";
 
 const navLinks = [
   { href: "/", label: "Home", icon: faHouse },
+  { href: "/architects", label: "Architects", icon: faBuilding },
   { href: "/all-tiles", label: "All Tiles", icon: faGrip },
-  { href: "/my-profile", label: "My Profile", icon: faUser },
 ];
 
 export default function Navbar() {
@@ -20,11 +28,9 @@ export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const loginHref = pathname ? `/login?next=${encodeURIComponent(pathname)}` : "/login";
+  const registerHref = pathname ? `/register?next=${encodeURIComponent(pathname)}` : "/register";
   const mobileMenuId = "mobile-primary-nav";
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -47,7 +53,7 @@ export default function Navbar() {
               href={link.href}
               className="inline-flex items-center gap-2 text-xs tracking-wide text-(--color-text-muted) transition-colors hover:text-foreground"
             >
-              <FontAwesomeIcon icon={link.icon} className="h-3.5 w-3.5" />
+              {link.icon ? <FontAwesomeIcon icon={link.icon} className="h-3.5 w-3.5" /> : null}
               {link.label}
             </Link>
           ))}
@@ -58,9 +64,8 @@ export default function Navbar() {
             <span className="text-xs tracking-wide text-(--color-text-muted) uppercase">Loading</span>
           ) : session?.user ? (
             <>
-              <Button as={Link} href="/my-profile" variant="ghost">
+              <Button as={Link} href="/my-profile" variant="ghost" aria-label="My Profile">
                 <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
-                {session.user.name || "My Profile"}
               </Button>
               <Button onClick={handleLogout}>
                 <FontAwesomeIcon icon={faRightFromBracket} className="h-3.5 w-3.5" />
@@ -68,10 +73,15 @@ export default function Navbar() {
               </Button>
             </>
           ) : (
-            <Button as={Link} href={loginHref}>
-              <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
-              Login
-            </Button>
+            <>
+              <Button as={Link} href={loginHref}>
+                <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
+                Login
+              </Button>
+              <Button as={Link} href={registerHref} variant="ghost">
+                Register
+              </Button>
+            </>
           )}
         </div>
 
@@ -92,32 +102,41 @@ export default function Navbar() {
 
       <div
         id={mobileMenuId}
-        className={`overflow-hidden border-t border-(--color-border) bg-(--color-surface) transition-all duration-300 ease-out md:hidden ${
-          isMobileMenuOpen ? "max-h-[360px] opacity-100" : "max-h-0 opacity-0"
+        className={`overflow-hidden border-t border-(--color-border) bg-(--color-surface) transition-all duration-400 ease-out md:hidden ${
+          isMobileMenuOpen ? "max-h-[420px] opacity-100 translate-y-0" : "pointer-events-none max-h-0 opacity-0 -translate-y-2"
         }`}
       >
         <div className="mx-auto w-full max-w-[1280px] space-y-5 px-6 py-4">
           <nav className="flex flex-col gap-3">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="inline-flex items-center gap-2 text-sm font-medium text-(--color-text-muted) transition-colors hover:text-foreground"
+                onClick={closeMobileMenu}
+                style={{ transitionDelay: isMobileMenuOpen ? `${90 + index * 45}ms` : "0ms" }}
+                className={`inline-flex items-center gap-2 text-sm font-medium text-(--color-text-muted) transition-all duration-300 hover:text-foreground ${
+                  isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-3 opacity-0"
+                }`}
               >
-                <FontAwesomeIcon icon={link.icon} className="h-4 w-4" />
+                {link.icon ? <FontAwesomeIcon icon={link.icon} className="h-4 w-4" /> : null}
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex flex-col gap-2">
+          <div
+            style={{ transitionDelay: isMobileMenuOpen ? `${90 + navLinks.length * 45}ms` : "0ms" }}
+            className={`flex flex-col gap-2 transition-all duration-300 ${
+              isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+            }`}
+          >
             {isPending ? (
               <span className="text-xs tracking-wide text-(--color-text-muted) uppercase">Loading</span>
             ) : session?.user ? (
               <>
-                <Button as={Link} href="/my-profile" variant="ghost" className="w-full justify-center">
+                <Button as={Link} href="/my-profile" onClick={closeMobileMenu} variant="ghost" className="w-full justify-center">
                   <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
-                  {session.user.name || "My Profile"}
+                  My Profile
                 </Button>
                 <Button onClick={handleLogout} className="w-full justify-center">
                   <FontAwesomeIcon icon={faRightFromBracket} className="h-3.5 w-3.5" />
@@ -125,10 +144,15 @@ export default function Navbar() {
                 </Button>
               </>
             ) : (
-              <Button as={Link} href={loginHref} className="w-full justify-center">
-                <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
-                Login
-              </Button>
+              <>
+                <Button as={Link} href={loginHref} onClick={closeMobileMenu} className="w-full justify-center">
+                  <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
+                  Login
+                </Button>
+                <Button as={Link} href={registerHref} onClick={closeMobileMenu} variant="ghost" className="w-full justify-center">
+                  Register
+                </Button>
+              </>
             )}
           </div>
         </div>

@@ -1,10 +1,6 @@
 import Link from "next/link";
 
-export default async function Footer() {
-  // #region agent log
-  await fetch("http://127.0.0.1:7322/ingest/cbbbcd65-c654-464a-b36c-50ef6abcbd17", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ca1ca6" }, body: JSON.stringify({ sessionId: "ca1ca6", runId: "pre-fix", hypothesisId: "H4", location: "src/components/layout/footer.jsx:4", message: "Footer classes before canonicalization", data: { footerShellClass: "border-[var(--color-border)] bg-[var(--color-surface)]", mutedTextClass: "text-(--color-text-muted)", socialHoverClass: "hover:text-(--color-text)", dividerBorderClass: "border-[var(--color-border)]" }, timestamp: Date.now() }) }).catch(() => {});
-  await fetch("http://127.0.0.1:7322/ingest/cbbbcd65-c654-464a-b36c-50ef6abcbd17", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ca1ca6" }, body: JSON.stringify({ sessionId: "ca1ca6", runId: "post-fix", hypothesisId: "V4", location: "src/components/layout/footer.jsx:5", message: "Footer classes after canonicalization", data: { footerShellClass: "border-(--color-border) bg-(--color-surface)", headingTextClass: "text-foreground", socialHoverClass: "hover:text-foreground", dividerBorderClass: "border-(--color-border)" }, timestamp: Date.now() }) }).catch(() => {});
-  // #endregion
+export default function Footer() {
   return (
     <footer className="mt-16 border-t border-(--color-border) bg-(--color-surface)">
       <div className="mx-auto grid w-full max-w-[1280px] gap-8 px-6 py-8 text-[11px] tracking-wide text-(--color-text-muted) md:grid-cols-3">

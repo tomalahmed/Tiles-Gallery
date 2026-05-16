@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import Image from "next/image";
 import { getServerSession } from "@/lib/server-session";
-import { getFeaturedTiles } from "@/lib/tiles-service";
+import { getFavoriteTilesByUserId } from "@/lib/favorites-service";
+import SavedCollectionsSection from "@/components/profile/saved-collections-section";
+
+const DEFAULT_PROFILE_IMAGE = "/default-profile.svg";
 
 export default async function MyProfilePage() {
   const sessionData = await getServerSession();
@@ -12,141 +14,90 @@ export default async function MyProfilePage() {
     redirect("/login?next=/my-profile");
   }
 
-  const showcasedTiles = await getFeaturedTiles(3);
+  const favoriteTiles = user.id ? await getFavoriteTilesByUserId(user.id) : [];
 
   return (
-    <div className="w-full bg-background px-2 py-4 text-foreground md:px-4">
+    <div className="w-full bg-background px-3 py-5 text-foreground sm:px-4 md:px-6 md:py-8">
       <div className="mx-auto w-full max-w-[1180px] space-y-8">
-        <section className="rounded-sm border border-(--color-border) bg-(--color-surface) p-5 md:p-8">
-          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        <section className="relative overflow-hidden rounded-sm border border-(--color-border) bg-(--color-surface) p-5 md:p-8">
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-[#c8a15d14] via-transparent to-transparent" />
+          <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-4 md:gap-6">
               <div className="relative h-20 w-20 overflow-hidden rounded-sm border border-(--color-border) bg-background md:h-24 md:w-24">
-                {user.image ? (
-                  <Image src={user.image} alt={user.name || "Profile"} fill sizes="96px" className="object-cover" />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-3xl font-semibold text-(--color-text-muted)">
-                    {(user.name || user.email || "U").slice(0, 1).toUpperCase()}
-                  </div>
-                )}
+                <img
+                  src={user.image || DEFAULT_PROFILE_IMAGE}
+                  alt={user.name || "Profile"}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
               </div>
 
               <div className="space-y-2">
-                <p className="text-[10px] tracking-[0.18em] text-(--color-accent)">PROFESSIONAL ARCHITECT</p>
+                <p className="text-[10px] tracking-[0.2em] text-(--color-accent)">PROFESSIONAL ARCHITECT</p>
                 <h1 className="text-3xl font-semibold text-foreground md:text-5xl">{user.name || "Designer Profile"}</h1>
-                <div className="flex items-center gap-3">
-                  <Link
-                    href="/my-profile/update"
-                    className="border border-(--color-border) bg-(--color-primary) px-4 py-2 text-xs font-semibold tracking-widest text-[#1a1611] transition hover:opacity-90"
-                  >
-                    EDIT PROFILE
-                  </Link>
-                  <p className="text-xs text-(--color-text-muted)">{user.email}</p>
-                </div>
+                <p className="text-xs text-(--color-text-muted) md:text-sm">{user.email}</p>
               </div>
             </div>
 
-            <Link
-              href="/all-tiles"
-              className="inline-flex items-center justify-center border border-(--color-border) px-4 py-2 text-xs tracking-[0.14em] text-(--color-primary) transition hover:border-(--color-primary)"
-            >
-              EXPLORE TILES
-            </Link>
-          </div>
-        </section>
-
-        <section className="grid grid-cols-1 gap-3 border-y border-(--color-border) py-4 md:grid-cols-3">
-          <div className="border border-(--color-border) bg-(--color-surface) px-5 py-5">
-            <p className="text-[10px] tracking-[0.16em] text-(--color-text-muted)">SAVED TEXTURES</p>
-            <p className="mt-2 text-4xl text-foreground">{showcasedTiles.length}</p>
-          </div>
-          <div className="border border-(--color-border) bg-(--color-surface) px-5 py-5">
-            <p className="text-[10px] tracking-[0.16em] text-(--color-text-muted)">PROJECT BOARDS</p>
-            <p className="mt-2 text-4xl text-foreground">08</p>
-          </div>
-          <div className="border border-(--color-border) bg-(--color-surface) px-5 py-5">
-            <p className="text-[10px] tracking-[0.16em] text-(--color-text-muted)">ORDER HISTORY</p>
-            <p className="mt-2 text-4xl text-foreground">12</p>
-          </div>
-        </section>
-
-        <section className="space-y-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-foreground">Saved Collections</h2>
-            <Link href="/all-tiles" className="text-xs tracking-[0.14em] text-(--color-primary) hover:underline">
-              VIEW ALL COLLECTIONS
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {showcasedTiles.map((tile, index) => (
-              <article key={tile.id} className={`group overflow-hidden border border-(--color-border) ${index === 0 ? "md:col-span-2" : ""} bg-(--color-surface)`}>
-                <div className="relative h-56">
-                  <Image
-                    src={tile.image}
-                    alt={tile.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="space-y-2 p-4">
-                  <p className="text-[10px] tracking-[0.16em] text-(--color-text-muted)">{tile.material} SURFACE</p>
-                  <h3 className="text-xl font-semibold text-foreground">{tile.title}</h3>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-(--color-text-muted)">
-                      {tile.dimensions} - ${tile.price.toFixed(2)}
-                    </p>
-                    <span className="border border-(--color-border) px-2 py-1 text-[10px] text-(--color-primary)">LOVE ❤</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-
-            <article className="flex min-h-[320px] flex-col justify-between border border-(--color-border) bg-(--color-surface) p-6">
-              <div>
-                <p className="text-[10px] tracking-[0.16em] text-(--color-text-muted)">NEW BOARD</p>
-                <h3 className="mt-3 max-w-xs text-4xl font-semibold leading-tight text-foreground">
-                  Start a new project board with bespoke textures.
-                </h3>
-              </div>
-              <button
-                type="button"
-                className="mt-4 w-fit border border-(--color-border) bg-(--color-primary) px-5 py-3 text-xs tracking-[0.14em] text-[#1a1611] transition hover:opacity-90"
+            <div className="flex w-full flex-wrap items-center gap-3 md:w-auto md:justify-end">
+              <Link
+                href="/my-profile/update"
+                className="inline-flex min-h-11 flex-1 items-center justify-center border border-(--color-border) bg-(--color-primary) px-4 py-2.5 text-xs font-semibold tracking-[0.14em] text-[#1a1611] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 md:min-h-0 md:flex-none"
               >
-                CREATE NEW PROJECT
-              </button>
-            </article>
+                EDIT PROFILE
+              </Link>
+              <Link
+                href="/all-tiles"
+                className="inline-flex min-h-11 flex-1 items-center justify-center border border-(--color-border) px-4 py-2.5 text-xs tracking-[0.14em] text-(--color-primary) transition-all duration-300 hover:-translate-y-0.5 hover:border-(--color-primary) md:min-h-0 md:flex-none"
+              >
+                EXPLORE TILES
+              </Link>
+            </div>
           </div>
         </section>
+
+        <SavedCollectionsSection initialTiles={favoriteTiles} />
 
         <section className="space-y-4 border-t border-(--color-border) pt-8">
-          <h2 className="text-2xl font-semibold text-foreground">Account Settings</h2>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold text-foreground">Account Settings</h2>
+            <p className="text-xs tracking-[0.14em] text-(--color-text-muted)">SECURE & MANAGE</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <Link
               href="/my-profile/update"
-              className="flex items-center justify-between border border-(--color-border) bg-(--color-surface) p-4 transition hover:border-(--color-primary)"
+              className="group rounded-sm border border-(--color-border) bg-(--color-surface) p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--color-primary)"
             >
-              <div>
-                <p className="text-sm font-semibold text-foreground">Professional Details</p>
-                <p className="text-xs text-(--color-text-muted)">Update your account and firm details.</p>
-              </div>
-              <span className="text-(--color-primary)">›</span>
+              <p className="text-[10px] tracking-[0.16em] text-(--color-accent)">PROFILE</p>
+              <p className="mt-2 text-sm font-semibold text-foreground">Professional Details</p>
+              <p className="mt-1 text-xs text-(--color-text-muted)">Update your name, firm details, and profile image.</p>
+              <p className="mt-4 text-xs tracking-[0.14em] text-(--color-primary) transition group-hover:translate-x-1">MANAGE →</p>
             </Link>
 
             <Link
-              href="/my-profile/update"
-              className="flex items-center justify-between border border-(--color-border) bg-(--color-surface) p-4 transition hover:border-(--color-primary)"
+              href="/my-profile/settings?tab=notifications"
+              className="group rounded-sm border border-(--color-border) bg-(--color-surface) p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--color-primary)"
             >
-              <div>
-                <p className="text-sm font-semibold text-foreground">Notification Center</p>
-                <p className="text-xs text-(--color-text-muted)">Manage product alerts and sample updates.</p>
-              </div>
-              <span className="text-(--color-primary)">›</span>
+              <p className="text-[10px] tracking-[0.16em] text-(--color-accent)">NOTIFICATIONS</p>
+              <p className="mt-2 text-sm font-semibold text-foreground">Alert Preferences</p>
+              <p className="mt-1 text-xs text-(--color-text-muted)">Control updates for launches, samples, and offers.</p>
+              <p className="mt-4 text-xs tracking-[0.14em] text-(--color-primary) transition group-hover:translate-x-1">MANAGE →</p>
+            </Link>
+
+            <Link
+              href="/my-profile/settings?tab=security"
+              className="group rounded-sm border border-(--color-border) bg-(--color-surface) p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--color-primary)"
+            >
+              <p className="text-[10px] tracking-[0.16em] text-(--color-accent)">SECURITY</p>
+              <p className="mt-2 text-sm font-semibold text-foreground">Login & Password</p>
+              <p className="mt-1 text-xs text-(--color-text-muted)">Review account access and keep your profile protected.</p>
+              <p className="mt-4 text-xs tracking-[0.14em] text-(--color-primary) transition group-hover:translate-x-1">MANAGE →</p>
             </Link>
           </div>
         </section>
       </div>
-
     </div>
   );
 }

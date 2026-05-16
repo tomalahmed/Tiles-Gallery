@@ -40,6 +40,7 @@ body {
 
 a {
   color: inherit;
+  transition: color 220ms ease, opacity 220ms ease, border-color 220ms ease;
 }
 
 .surface-card {
@@ -67,4 +68,18 @@ a {
   width: max-content;
   min-width: 200%;
   animation: marquee-scroll 22s linear infinite;
+}
+
+/* Lenis baseline styles for smooth scrolling behavior */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }

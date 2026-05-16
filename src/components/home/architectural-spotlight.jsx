@@ -15,11 +15,7 @@ const spotlightContent = {
   imageAlt: "Luxury sandstone-inspired bathroom interior",
 };
 
-export default async function ArchitecturalSpotlight() {
-  // #region agent log
-  await fetch("http://127.0.0.1:7322/ingest/cbbbcd65-c654-464a-b36c-50ef6abcbd17", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ca1ca6" }, body: JSON.stringify({ sessionId: "ca1ca6", runId: "pre-fix", hypothesisId: "H3", location: "src/components/home/architectural-spotlight.jsx:19", message: "Spotlight classes before canonicalization", data: { titleTextClass: "text-(--color-text)", eyebrowAccentClass: "text-(--color-accent)", descriptionMutedClass: "text-(--color-text-muted)" }, timestamp: Date.now() }) }).catch(() => {});
-  await fetch("http://127.0.0.1:7322/ingest/cbbbcd65-c654-464a-b36c-50ef6abcbd17", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ca1ca6" }, body: JSON.stringify({ sessionId: "ca1ca6", runId: "post-fix", hypothesisId: "V3", location: "src/components/home/architectural-spotlight.jsx:20", message: "Spotlight classes after canonicalization", data: { titleTextClass: "text-foreground", eyebrowAccentClass: "text-(--color-accent)", descriptionMutedClass: "text-(--color-text-muted)" }, timestamp: Date.now() }) }).catch(() => {});
-  // #endregion
+export default function ArchitecturalSpotlight() {
   return (
     <section className="mt-12 space-y-4">
       <h2 className="text-3xl font-semibold text-foreground">{spotlightContent.sectionLabel}</h2>
