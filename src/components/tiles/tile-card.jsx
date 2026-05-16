@@ -5,7 +5,9 @@ import Chip from "@/components/ui/chip";
 import Button from "@/components/ui/button";
 import FavoriteButton from "@/components/tiles/favorite-button";
 
-export default function TileCard({ tile, initialIsFavorited = false }) {
+export default function TileCard({ tile, detailsHref, initialIsFavorited = false }) {
+  const resolvedDetailsHref = detailsHref || `/tiles/${tile.id}`;
+
   return (
     <CardShell className="h-full space-y-4">
       <div className="relative h-40 overflow-hidden rounded-sm border border-(--color-border)">
@@ -27,7 +29,7 @@ export default function TileCard({ tile, initialIsFavorited = false }) {
       </div>
       <div className="flex items-center justify-between pt-2">
         <span className="text-sm font-semibold text-(--color-primary)">${tile.price.toFixed(2)}</span>
-        <Button as={Link} href={`/tiles/${tile.id}`} variant="subtle" className="px-3 py-2 text-[10px]">
+        <Button as={Link} href={resolvedDetailsHref} variant="subtle" className="px-3 py-2 text-[10px]">
           Details
         </Button>
       </div>

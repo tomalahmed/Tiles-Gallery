@@ -17,9 +17,20 @@ export default async function TileGrid({ tiles = [] }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {tiles.map((tile, index) => (
-        <TileCard key={tile.id} tile={tile} index={index} initialIsFavorited={favoriteTileIdSet.has(tile.id)} />
-      ))}
+      {tiles.map((tile, index) => {
+        const detailsPath = `/tiles/${tile.id}`;
+        const detailsHref = user ? detailsPath : `/login?next=${encodeURIComponent(detailsPath)}`;
+
+        return (
+          <TileCard
+            key={tile.id}
+            tile={tile}
+            index={index}
+            detailsHref={detailsHref}
+            initialIsFavorited={favoriteTileIdSet.has(tile.id)}
+          />
+        );
+      })}
     </div>
   );
 }

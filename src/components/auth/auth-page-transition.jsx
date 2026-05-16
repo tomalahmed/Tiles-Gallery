@@ -1,20 +1,28 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 export default function AuthPageTransition({ children }) {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
+
+  const initialState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.995 };
+  const animateState = shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 };
+  const exitState = shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -14, scale: 0.995 };
+  const transition = shouldReduceMotion
+    ? { duration: 0.16 }
+    : { duration: 0.34, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={pathname}
-        initial={{ opacity: 0, x: 46, scale: 1.018, filter: "blur(18px)" }}
-        animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-        exit={{ opacity: 0, x: -46, scale: 0.992, filter: "blur(14px)" }}
-        transition={{ duration: 0.78, ease: [0.19, 1, 0.22, 1] }}
-        className="w-full"
+        initial={initialState}
+        animate={animateState}
+        exit={exitState}
+        transition={transition}
+        className="w-full will-change-transform"
       >
         {children}
       </motion.div>

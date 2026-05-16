@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { addFavorite, removeFavorite } from "@/lib/favorites-client";
 import { cn } from "@/lib/cn";
@@ -20,6 +20,11 @@ export default function FavoriteButton({
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleToggleFavorite = async () => {
     if (isLoading || isPending) {
@@ -68,7 +73,7 @@ export default function FavoriteButton({
       <button
         type="button"
         onClick={handleToggleFavorite}
-        disabled={isLoading || isPending}
+        disabled={isLoading || (isMounted && isPending)}
         aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
         title={isFavorited ? "Remove from favorites" : "Add to favorites"}
         className={cn(
